@@ -1,0 +1,19 @@
+name: miniconda
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - plyfile
+  - tensorboard=1.15.0
+  - einops
+  - h5py
+  - pandas
+  - seaborn
+  - pip
+  - pickleshare
+  - pip:
+    - memcnn
+prefix: /home/user/miniconda
