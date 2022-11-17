@@ -1,62 +1,44 @@
 ARG IMAGE_NAME
-FROM ${IMAGE_NAME}:11.6.0-runtime-ubuntu20.04 as base
+FROM ${IMAGE_NAME}:11.0.3-runtime-ubuntu20.04 as base
 
-ENV NV_CUDA_LIB_VERSION "11.6.0-1"
+ENV NV_CUDA_LIB_VERSION "11.0.3-1"
 
 FROM base as base-amd64
 
-ENV NV_CUDA_CUDART_DEV_VERSION 11.6.55-1
-ENV NV_NVML_DEV_VERSION 11.6.55-1
-ENV NV_LIBCUSPARSE_DEV_VERSION 11.7.1.55-1
-ENV NV_LIBNPP_DEV_VERSION 11.6.0.55-1
-ENV NV_LIBNPP_DEV_PACKAGE libnpp-dev-11-6=${NV_LIBNPP_DEV_VERSION}
+ENV NV_CUDA_CUDART_DEV_VERSION 11.0.221-1
+ENV NV_NVML_DEV_VERSION 11.0.167-1
+ENV NV_LIBCUSPARSE_DEV_VERSION 11.1.1.245-1
+ENV NV_LIBNPP_DEV_VERSION 11.1.0.245-1
+ENV NV_LIBNPP_DEV_PACKAGE libnpp-dev-11-0=${NV_LIBNPP_DEV_VERSION}
 
-ENV NV_LIBCUBLAS_DEV_VERSION 11.8.1.74-1
-ENV NV_LIBCUBLAS_DEV_PACKAGE_NAME libcublas-dev-11-6
+ENV NV_LIBCUBLAS_DEV_VERSION 11.2.0.252-1
+ENV NV_LIBCUBLAS_DEV_PACKAGE_NAME libcublas-dev-11-0
 ENV NV_LIBCUBLAS_DEV_PACKAGE ${NV_LIBCUBLAS_DEV_PACKAGE_NAME}=${NV_LIBCUBLAS_DEV_VERSION}
 
-ENV NV_NVPROF_VERSION 11.6.55-1
-ENV NV_NVPROF_DEV_PACKAGE cuda-nvprof-11-6=${NV_NVPROF_VERSION}
+ENV NV_NVPROF_VERSION 11.0.221-1
+ENV NV_NVPROF_DEV_PACKAGE cuda-nvprof-11-0=${NV_NVPROF_VERSION}
 
 ENV NV_LIBNCCL_DEV_PACKAGE_NAME libnccl-dev
-ENV NV_LIBNCCL_DEV_PACKAGE_VERSION 2.12.10-1
-ENV NCCL_VERSION 2.12.10-1
-ENV NV_LIBNCCL_DEV_PACKAGE ${NV_LIBNCCL_DEV_PACKAGE_NAME}=${NV_LIBNCCL_DEV_PACKAGE_VERSION}+cuda11.6
-FROM base as base-arm64
+ENV NV_LIBNCCL_DEV_PACKAGE_VERSION 2.13.4-1
+ENV NCCL_VERSION 2.13.4-1
+ENV NV_LIBNCCL_DEV_PACKAGE ${NV_LIBNCCL_DEV_PACKAGE_NAME}=${NV_LIBNCCL_DEV_PACKAGE_VERSION}+cuda11.0
 
-ENV NV_CUDA_CUDART_DEV_VERSION 11.6.55-1
-ENV NV_NVML_DEV_VERSION 11.6.55-1
-ENV NV_LIBCUSPARSE_DEV_VERSION 11.7.1.55-1
-ENV NV_LIBNPP_DEV_VERSION 11.6.0.55-1
-ENV NV_LIBNPP_DEV_PACKAGE libnpp-dev-11-6=${NV_LIBNPP_DEV_VERSION}
-
-ENV NV_LIBCUBLAS_DEV_PACKAGE_NAME libcublas-dev-11-6
-ENV NV_LIBCUBLAS_DEV_VERSION 11.8.1.74-1
-ENV NV_LIBCUBLAS_DEV_PACKAGE ${NV_LIBCUBLAS_DEV_PACKAGE_NAME}=${NV_LIBCUBLAS_DEV_VERSION}
-
-ENV NV_NVPROF_VERSION 11.6.55-1
-ENV NV_NVPROF_DEV_PACKAGE cuda-nvprof-11-6=${NV_NVPROF_VERSION}
-
-ENV NV_LIBNCCL_DEV_PACKAGE_NAME libnccl-dev
-ENV NV_LIBNCCL_DEV_PACKAGE_VERSION 2.12.10-1
-ENV NCCL_VERSION 2.12.10-1
-ENV NV_LIBNCCL_DEV_PACKAGE ${NV_LIBNCCL_DEV_PACKAGE_NAME}=${NV_LIBNCCL_DEV_PACKAGE_VERSION}+cuda11.6
-
-ARG TARGETARCH
 FROM base-amd64
+
+# ARG TARGETARCH
 
 LABEL maintainer "NVIDIA CORPORATION <cudatools@nvidia.com>"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libtinfo5 libncursesw5 \
-    cuda-cudart-dev-11-6=${NV_CUDA_CUDART_DEV_VERSION} \
-    cuda-command-line-tools-11-6=${NV_CUDA_LIB_VERSION} \
-    cuda-minimal-build-11-6=${NV_CUDA_LIB_VERSION} \
-    cuda-libraries-dev-11-6=${NV_CUDA_LIB_VERSION} \
-    cuda-nvml-dev-11-6=${NV_NVML_DEV_VERSION} \
+    cuda-cudart-dev-11-0=${NV_CUDA_CUDART_DEV_VERSION} \
+    cuda-command-line-tools-11-0=${NV_CUDA_LIB_VERSION} \
+    cuda-minimal-build-11-0=${NV_CUDA_LIB_VERSION} \
+    cuda-libraries-dev-11-0=${NV_CUDA_LIB_VERSION} \
+    cuda-nvml-dev-11-0=${NV_NVML_DEV_VERSION} \
     ${NV_NVPROF_DEV_PACKAGE} \
     ${NV_LIBNPP_DEV_PACKAGE} \
-    libcusparse-dev-11-6=${NV_LIBCUSPARSE_DEV_VERSION} \
+    libcusparse-dev-11-0=${NV_LIBCUSPARSE_DEV_VERSION} \
     ${NV_LIBCUBLAS_DEV_PACKAGE} \
     ${NV_LIBNCCL_DEV_PACKAGE} \
     && rm -rf /var/lib/apt/lists/*
@@ -65,6 +47,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-mark hold ${NV_LIBCUBLAS_DEV_PACKAGE_NAME} ${NV_LIBNCCL_DEV_PACKAGE_NAME}
 
 ENV LIBRARY_PATH /usr/local/cuda/lib64/stubs
+
 
 #--upgrade
 RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
@@ -119,9 +102,8 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         tensorboard \
         ninja \
         memcnn \
-        scikit-image \
+        scikit-learn==0.24.2 \
         jupyter \
-        sklearn \
         # numba \
         einops \
         # opencv-python \
@@ -134,7 +116,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         Pillow \
         plyfile \
         # pyntcloud \
-        pickleshare \
+        pickleshare==0.7.5 \
         # trimesh \
         # pyrender \
         # mesh-to-sdf \
@@ -146,8 +128,8 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
 
 RUN PIP_INSTALL="python -m pip --no-cache-dir install" && \
     $PIP_INSTALL \
-    torch==1.12.0+cu116 torchvision==0.13.0+cu116 -f https://download.pytorch.org/whl/torch_stable.html 
-    # torch==1.6.0+cu101 torchvision==0.7.0+cu101 -f https://download.pytorch.org/whl/torch_stable.html 
+    # torch==1.12.0+cu116 torchvision==0.13.0+cu116 -f https://download.pytorch.org/whl/torch_stable.html 
+    torch==1.7.0+cu101 torchvision==0.8.1+cu101 -f https://download.pytorch.org/whl/torch_stable.html 
 
 RUN pip install --upgrade https://github.com/unlimblue/KNN_CUDA/releases/download/0.2/KNN_CUDA-0.2-py3-none-any.whl
 
@@ -168,9 +150,9 @@ COPY . /app
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
-
-RUN python -c "import torch; print(torch.__version__)" 
-RUN python -c "import torch; print(torch.version.cuda)" 
-RUN python -c "import torch; print(torch.cuda.is_available())" 
+# RUN chmod -R 775 /app/results
+# RUN python -c "import torch; print(torch.__version__)" 
+# RUN python -c "import torch; print(torch.version.cuda)" 
+# RUN python -c "import torch; print(torch.cuda.is_available())" 
 
 CMD ["python", "main.py "]
