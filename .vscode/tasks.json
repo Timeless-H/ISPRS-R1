@@ -1,0 +1,35 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+          "type": "docker-build",
+          "label": "docker-build",
+          "platform": "python",
+          "dockerBuild": {
+              "tag": "preformer-docker:latest",
+              "buildArgs":{"IMAGE_NAME":"nvidia/cuda",
+              "TARGETARCH":"amd64"
+              },
+              "dockerfile": "${workspaceFolder}/Dockerfile",
+              "context": "${workspaceFolder}",
+              "pull":true
+          }
+        },
+        {
+          "type": "docker-run",
+          "label": "docker-run: debug",
+          "dependsOn": ["docker-build"],
+          "dockerRun":{
+            "customOptions":"--gpus all",
+            "volumes": [
+              {"localPath":"/mnt/data/Hope_Backup/Toronto_ranla_data/subsampled/","containerPath":"/data"},
+              // {"localPath":"${PWD}/data","containerPath":"/data"},
+              {"localPath":"${PWD}/results","containerPath":"/outputs"}
+              ]
+            },
+          "python": {
+            "file": "main.py",
+          }
+        }
+    ]
+  }

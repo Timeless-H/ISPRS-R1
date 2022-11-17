@@ -126,7 +126,7 @@ class IT_Fast_Attn(nn.Module):
         # )
         self.mlp2 = nn.Sequential(
             nn.Linear(2 * dim, 2 * dim, bias=True),
-            nn.ReLU(inplace=True),  # todo: test GELU scenario
+            nn.ReLU(),  # todo: test GELU scenario
         )
         # self.proj = nn.Linear(dim, dim * 4, bias=False)
         self.drop1 = nn.Dropout(0.2)
@@ -221,11 +221,11 @@ class ClassicMHA(nn.Module):
     
         # # qkv version of mha
         # dot = torch.matmul(Q, torch.transpose(K, -2, -1))
-        dot = dot / math.sqrt(self.head_dim)
+        # dot = dot / math.sqrt(self.head_dim)
         # dot = dot - 1e6 * (1 - mask[:, None, None, :])
 
-        attn = F.softmax(dot, dim = -1)
-        attn = self.drop_attn(attn)
+        attn = F.softmax(dot, dim = -2)
+        # attn = self.drop_attn(attn)
 
         x = torch.matmul(Q, attn)
         # x = torch.matmul(attn, V)
@@ -250,3 +250,75 @@ class ClassicMHA(nn.Module):
         X = X.transpose(1, 2)
         return X
 
+class KVQcMHA(nn.Module):
+    def __init__(self, dim, layer_num, use_mask=False):
+        super(KVQcMHA, self).__init__()
+        self.layer_num = layer_num
+        self.use_mask = use_mask
+        self.dim = dim
+        self.hidden_dim = dim * 4
+        self.head_dim = Config.head_dim[layer_num]
+        self.num_head = Config.num_heads[layer_num]
+
+        self.W_q = nn.Linear(self.dim, self.num_head * self.head_dim)
+        self.W_k = nn.Linear(self.dim, self.num_head * self.head_dim)
+        self.W_v = nn.Linear(self.dim, self.num_head * self.head_dim)
+
+        self.drop_attn = nn.Dropout(0.2)
+
+        self.ff_attn = nn.Linear(self.num_head * self.head_dim, self.dim)
+
+        self.drop1 = nn.Dropout(0.2)
+        self.lnorm1 = nn.LayerNorm(self.dim)
+
+        self.ff_mha = nn.Sequential(
+            nn.Linear(self.dim, self.hidden_dim),
+            nn.ReLU(),
+            nn.Linear(self.hidden_dim, self.dim),
+        )
+
+        self.drop2 = nn.Dropout(0.2)
+        self.lnorm2 = nn.LayerNorm(self.dim)
+
+    def forward(self, x, mask=None):
+
+        x = x.permute(0, 2, 1)
+        if self.use_mask:
+            B, N, _ = x.shape
+            mask = torch.ones(B, N).bool().cuda()
+        
+        # softmax scaled dot product with (multiple) heads
+        Q = self.split_heads(self.W_q(x))
+        K = self.split_heads(self.W_k(x))
+        V = self.split_heads(self.W_v(x))
+
+        # # kvq version of mha
+        dot = torch.matmul(torch.transpose(K, -2, -1), V)
+
+        # dot = dot / math.sqrt(self.head_dim)  # [14_21-05]
+        # dot = dot - 1e6 * (1 - mask[:, None, None, :])
+
+        attn = F.softmax(dot, dim = -1)
+        # attn = self.drop_attn(attn)  # [14_06-12]
+
+        x = torch.matmul(Q, attn)
+
+        x = self.combine_heads(x)
+
+        x = self.ff_attn(x)  # mha output
+
+        # applying identity, normalization and dropout
+        x = self.lnorm1(x + self.drop1(x))
+        x = self.lnorm2(x + self.drop2(self.ff_mha(x)))
+        
+        return x.permute(0,2,1)
+
+    def combine_heads(self, X):
+        X = X.transpose(1, 2)
+        X = X.reshape(X.size(0), X.size(1), self.num_head * self.head_dim)
+        return X
+
+    def split_heads(self, X):
+        X = X.reshape(X.size(0), X.size(1), self.num_head, self.head_dim)
+        X = X.transpose(1, 2)
+        return X

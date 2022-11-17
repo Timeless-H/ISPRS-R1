@@ -9,7 +9,7 @@ class Config(object):
     num_points = 4096  # Number of input points
     sub_grid_size = 0.04  # preprocess_parameter
 
-    experiment_dir = Path('experiments/')
+    experiment_dir = Path('/outputs/experiments/')
     experiment_dir.mkdir(exist_ok=True)
     file_dir = Path(str(experiment_dir) + '/' + str(datetime.now().strftime('%Y-%m-%d_%H-%M')))
     file_dir.mkdir(exist_ok=True)
@@ -40,16 +40,15 @@ class Config(object):
     dropout = 0.5
 
     num_layers = 4
-    k_nbrs = 16
+    k_nbrs = [32, 32, 32, 32]
     sub_sampling_ratio = [4, 4, 4, 4]
     layer_num = []
 
     pretrain = None
     # pretrain = '/home/perpetual/PycharmProjects/toronto_randla/experiments/2021-12-13_20-42/checkpoints/iNet_045_0.7360_0.8980.pth'
 
-    attn_type = "nystrom"  # softmax / fast_attn
-    num_heads = [2, 2, 2, 2]  #(512/2)/64  : input_dim/head_dim
-    head_dim = [32, 64, 96, 128]  # level 3 alt: 3H, 64Hdim
+    num_heads = [4, 4, 4, 4]  #(512/2)/64  : input_dim/head_dim
+    head_dim = [16, 32, 48, 64]  # real dim [64 128 192 256] / num_heads
 
 def start_logger(Config):
     """Set the logger to log info in terminal and file `log_path`.
@@ -70,6 +69,6 @@ def start_logger(Config):
     logger.addHandler(stream_handler)
 
     logging.info('Dataset name: %s' % (Config.data_name))
-    # logging.info('Dropout rate: %f' % (Config.dropout))
+    logging.info('k-nbrs: %s' % (Config.k_nbrs))
     logging.info('#Heads: %s' % (Config.num_heads))
     logging.info('Head_dims: %s' % (Config.head_dim))

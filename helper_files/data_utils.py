@@ -24,7 +24,7 @@ def build_input1(data, num_layers):
     # knn = KNN(k=16, transpose_mode=True)
     for i in range(num_layers):
         torch.manual_seed(seed_value)
-        knn = KNN(k=cfg.k_nbrs, transpose_mode=True)
+        knn = KNN(k=cfg.k_nbrs[i], transpose_mode=True)
         neigh_dist, neigh_idx = knn(coords, coords)
         # _, neigh_idx = cKDTree(coords.reshape(-1, 3)).query(coords, k=k_nbrs)
         sub_sampling_idx = coords.shape[1]//cfg.sub_sampling_ratio[i]
@@ -55,8 +55,8 @@ def unpack_input1(input_list, n_layers, device):
     inputs['interp_idx'] = input_list[4 * n_layers:5 * n_layers]
     # for key, val in inputs.items():
     #     inputs[key] = [x.to(device) for x in val]
-    inputs['features'] = input_list[5 * n_layers]  #.to(device)
-    inputs['labels'] = input_list[5 * n_layers + 1]  #.to(device)
+    inputs['features'] = input_list[5 * n_layers].to(device)
+    inputs['labels'] = input_list[5 * n_layers + 1].to(device)
     # inputs['input_inds'] = input_list[5 * n_layers + 2].to(device)
     # inputs['cloud_inds'] = input_list[5 * n_layers + 3].to(device)
     return inputs
@@ -76,7 +76,7 @@ def build_input_test(xyz, labels, num_layers):
 
     for i in range(num_layers):
         torch.manual_seed(seed_value)
-        knn = KNN(k=cfg.k_nbrs, transpose_mode=True)
+        knn = KNN(k=cfg.k_nbrs[i], transpose_mode=True)
         neigh_dist, neigh_idx = knn(coords, coords)
         # _, neigh_idx = cKDTree(coords.reshape(-1, 3)).query(coords, k=k_nbrs)
         sub_sampling_idx = coords.shape[1]//cfg.sub_sampling_ratio[i]
@@ -118,9 +118,9 @@ def test_seg_alt(model, loader, num_classes):
             sth.iter_set = input_list
             del input_list
 
-            pred = model(sth.iter_set['features'][:,:,:6].float().cuda())
+            pred = model(sth.iter_set['features'][:,:,:6].float()) # .cuda()
             # points = points.transpose(2, 1)
-            target = sth.iter_set['labels'].cuda()
+            target = sth.iter_set['labels'] #.cuda()
 
             val_accs.append(accuracy(pred.permute(0, 2, 1), target))
             val_ious.append(intersection_over_union(pred.permute(0, 2, 1), target))

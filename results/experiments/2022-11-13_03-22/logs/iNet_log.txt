@@ -1,0 +1,170 @@
+2022-11-13 03:23:01,236 - INFO - Dataset name: toronto_3d
+2022-11-13 03:23:01,236 - INFO - k-nbrs: 16.000000
+2022-11-13 03:23:01,236 - INFO - #Heads: [4, 4, 4, 4]
+2022-11-13 03:23:01,236 - INFO - Head_dims: [16, 32, 48, 64]
+2022-11-13 03:23:01,236 - INFO - point set size: 4096
+2022-11-13 03:23:07,037 - INFO - Parameters: 3'861'128
+2022-11-13 03:23:09,356 - INFO - [*]Memory 1071MiB max, 893MiB current
+2022-11-13 03:23:10,197 - INFO - [*]Memory 1286MiB max, 939MiB current
+2022-11-13 03:23:11,014 - INFO - [*]Memory 1331MiB max, 938MiB current
+2022-11-13 03:23:11,830 - INFO - [*]Memory 1331MiB max, 938MiB current
+2022-11-13 03:23:12,650 - INFO - [*]Memory 1331MiB max, 939MiB current
+2022-11-13 04:05:01,637 - INFO - ------------------------>> loss @ epoch 0: 1.713999
+2022-11-13 04:08:29,410 - INFO -          classes iou_tr acc_tr iou_val acc_val
+0         ground  0.380  0.831   0.445   0.899
+1  road_markings  0.000  0.000   0.000   0.000
+2        natural  0.197  0.425   0.249   0.450
+3       building  0.050  0.070   0.045   0.050
+4   utility_line  0.107  0.174   0.239   0.464
+5           pole  0.072  0.110   0.065   0.076
+6            car  0.014  0.017   0.000   0.000
+7          fence  0.000  0.001   0.000   0.000
+8        OA/mIoU  0.104  0.361   0.133   0.431
+2022-11-13 04:08:29,422 - INFO - Best accuracy is: 0.43100
+2022-11-13 04:08:29,422 - INFO - Best meanIOU is: 0.13300
+2022-11-13 04:08:31,402 - INFO - [*]Memory 1332MiB max, 938MiB current
+2022-11-13 04:08:32,444 - INFO - [*]Memory 1332MiB max, 939MiB current
+2022-11-13 04:08:33,289 - INFO - [*]Memory 1332MiB max, 939MiB current
+2022-11-13 04:08:34,131 - INFO - [*]Memory 1332MiB max, 939MiB current
+2022-11-13 04:08:34,993 - INFO - [*]Memory 1332MiB max, 939MiB current
+2022-11-13 04:50:43,012 - INFO - ------------------------>> loss @ epoch 1: 1.587967
+2022-11-13 04:54:11,024 - INFO -          classes iou_tr acc_tr iou_val acc_val
+0         ground  0.440  0.856   0.556   0.948
+1  road_markings  0.000  0.000   0.000   0.000
+2        natural  0.227  0.467   0.263   0.402
+3       building  0.068  0.097   0.149   0.222
+4   utility_line  0.195  0.318   0.306   0.404
+5           pole  0.119  0.186   0.215   0.257
+6            car  0.069  0.102   0.189   0.305
+7          fence  0.000  0.001   0.000   0.000
+8        OA/mIoU  0.141  0.406   0.213   0.506
+2022-11-13 04:54:11,036 - INFO - Best accuracy is: 0.50600
+2022-11-13 04:54:11,036 - INFO - Best meanIOU is: 0.21300
+2022-11-13 04:54:13,062 - INFO - [*]Memory 1332MiB max, 938MiB current
+2022-11-13 04:54:14,091 - INFO - [*]Memory 1332MiB max, 939MiB current
+2022-11-13 04:54:14,934 - INFO - [*]Memory 1332MiB max, 938MiB current
+2022-11-13 04:54:15,777 - INFO - [*]Memory 1332MiB max, 937MiB current
+2022-11-13 04:54:16,614 - INFO - [*]Memory 1332MiB max, 939MiB current
+2022-11-13 05:37:00,301 - INFO - ------------------------>> loss @ epoch 2: 1.509019
+2022-11-13 05:40:28,109 - INFO -          classes iou_tr acc_tr iou_val acc_val
+0         ground  0.486  0.871   0.729   0.895
+1  road_markings  0.021  0.025   0.018   0.020
+2        natural  0.247  0.495   0.354   0.631
+3       building  0.080  0.117   0.140   0.217
+4   utility_line  0.242  0.394   0.449   0.711
+5           pole  0.153  0.238   0.249   0.382
+6            car  0.102  0.158   0.198   0.245
+7          fence  0.002  0.003   0.009   0.012
+8        OA/mIoU  0.168  0.435   0.268   0.569
+2022-11-13 05:40:28,121 - INFO - Best accuracy is: 0.56900
+2022-11-13 05:40:28,121 - INFO - Best meanIOU is: 0.26800
+2022-11-13 05:40:30,171 - INFO - [*]Memory 1332MiB max, 938MiB current
+2022-11-13 05:40:31,179 - INFO - [*]Memory 1332MiB max, 939MiB current
+2022-11-13 05:40:32,049 - INFO - [*]Memory 1332MiB max, 938MiB current
+2022-11-13 05:40:32,895 - INFO - [*]Memory 1332MiB max, 937MiB current
+2022-11-13 05:40:33,738 - INFO - [*]Memory 1332MiB max, 939MiB current
+2022-11-13 06:24:15,365 - INFO - ------------------------>> loss @ epoch 3: 1.433807
+2022-11-13 06:27:43,513 - INFO -          classes iou_tr acc_tr iou_val acc_val
+0         ground  0.537  0.886   0.763   0.960
+1  road_markings  0.048  0.057   0.204   0.234
+2        natural  0.267  0.523   0.369   0.531
+3       building  0.101  0.155   0.233   0.368
+4   utility_line  0.274  0.433   0.522   0.709
+5           pole  0.184  0.287   0.415   0.522
+6            car  0.131  0.208   0.260   0.477
+7          fence  0.007  0.008   0.000   0.000
+8        OA/mIoU  0.194  0.464   0.348   0.629
+2022-11-13 06:27:43,525 - INFO - Best accuracy is: 0.62900
+2022-11-13 06:27:43,525 - INFO - Best meanIOU is: 0.34800
+2022-11-13 06:27:45,626 - INFO - [*]Memory 1332MiB max, 938MiB current
+2022-11-13 06:27:46,614 - INFO - [*]Memory 1332MiB max, 939MiB current
+2022-11-13 06:27:47,495 - INFO - [*]Memory 1332MiB max, 938MiB current
+2022-11-13 06:27:48,375 - INFO - [*]Memory 1332MiB max, 937MiB current
+2022-11-13 06:27:49,247 - INFO - [*]Memory 1332MiB max, 939MiB current
+2022-11-13 07:12:06,638 - INFO - ------------------------>> loss @ epoch 4: 1.380945
+2022-11-13 07:15:26,945 - INFO -          classes iou_tr acc_tr iou_val acc_val
+0         ground  0.570  0.895   0.847   0.946
+1  road_markings  0.069  0.083   0.391   0.461
+2        natural  0.283  0.539   0.441   0.636
+3       building  0.122  0.193   0.282   0.483
+4   utility_line  0.299  0.463   0.563   0.729
+5           pole  0.211  0.327   0.419   0.575
+6            car  0.147  0.233   0.353   0.461
+7          fence  0.012  0.015   0.061   0.083
+8        OA/mIoU  0.215  0.485   0.420   0.683
+2022-11-13 07:15:26,957 - INFO - Best accuracy is: 0.68300
+2022-11-13 07:15:26,957 - INFO - Best meanIOU is: 0.42000
+2022-11-13 08:00:43,702 - INFO - ------------------------>> loss @ epoch 5: 1.335101
+2022-11-13 08:04:10,809 - INFO - Best accuracy is: 0.68300
+2022-11-13 08:04:10,810 - INFO - Best meanIOU is: 0.42000
+2022-11-13 08:50:01,475 - INFO - ------------------------>> loss @ epoch 6: 1.323546
+2022-11-13 08:53:29,027 - INFO - Best accuracy is: 0.68300
+2022-11-13 08:53:29,028 - INFO - Best meanIOU is: 0.42000
+2022-11-13 09:39:51,698 - INFO - ------------------------>> loss @ epoch 7: 1.306413
+2022-11-13 09:43:18,071 - INFO - Best accuracy is: 0.68300
+2022-11-13 09:43:18,071 - INFO - Best meanIOU is: 0.42000
+2022-11-13 10:30:01,272 - INFO - ------------------------>> loss @ epoch 8: 1.290283
+2022-11-13 10:33:25,301 - INFO - Best accuracy is: 0.68300
+2022-11-13 10:33:25,301 - INFO - Best meanIOU is: 0.42000
+2022-11-13 11:20:44,363 - INFO - ------------------------>> loss @ epoch 9: 1.276699
+2022-11-13 11:24:07,161 - INFO - Best accuracy is: 0.68300
+2022-11-13 11:24:07,161 - INFO - Best meanIOU is: 0.42000
+2022-11-13 12:12:03,339 - INFO - ------------------------>> loss @ epoch 10: 1.259868
+2022-11-13 12:15:30,702 - INFO - Best accuracy is: 0.68300
+2022-11-13 12:15:30,702 - INFO - Best meanIOU is: 0.42000
+2022-11-13 13:03:52,377 - INFO - ------------------------>> loss @ epoch 11: 1.245027
+2022-11-13 13:07:14,569 - INFO - Best accuracy is: 0.68300
+2022-11-13 13:07:14,570 - INFO - Best meanIOU is: 0.42000
+2022-11-13 13:56:08,101 - INFO - ------------------------>> loss @ epoch 12: 1.237672
+2022-11-13 13:59:35,724 - INFO - Best accuracy is: 0.68300
+2022-11-13 13:59:35,724 - INFO - Best meanIOU is: 0.42000
+2022-11-13 14:49:01,500 - INFO - ------------------------>> loss @ epoch 13: 1.230236
+2022-11-13 14:52:28,862 - INFO - Best accuracy is: 0.68300
+2022-11-13 14:52:28,863 - INFO - Best meanIOU is: 0.42000
+2022-11-13 15:42:28,190 - INFO - ------------------------>> loss @ epoch 14: 1.218618
+2022-11-13 15:45:55,903 - INFO - Best accuracy is: 0.68300
+2022-11-13 15:45:55,904 - INFO - Best meanIOU is: 0.42000
+2022-11-13 16:36:28,612 - INFO - ------------------------>> loss @ epoch 15: 1.207930
+2022-11-13 16:39:54,673 - INFO - Best accuracy is: 0.68300
+2022-11-13 16:39:54,673 - INFO - Best meanIOU is: 0.42000
+2022-11-13 17:31:01,232 - INFO - ------------------------>> loss @ epoch 16: 1.196637
+2022-11-13 17:34:28,940 - INFO - Best accuracy is: 0.68300
+2022-11-13 17:34:28,940 - INFO - Best meanIOU is: 0.42000
+2022-11-13 18:26:08,959 - INFO - ------------------------>> loss @ epoch 17: 1.188262
+2022-11-13 18:29:35,977 - INFO -          classes iou_tr acc_tr iou_val acc_val
+0         ground  0.685  0.923   0.852   0.921
+1  road_markings  0.157  0.192   0.441   0.608
+2        natural  0.361  0.635   0.492   0.739
+3       building  0.205  0.343   0.293   0.511
+4   utility_line  0.374  0.535   0.580   0.740
+5           pole  0.313  0.478   0.353   0.414
+6            car  0.207  0.321   0.363   0.467
+7          fence  0.022  0.027   0.046   0.053
+8        OA/mIoU  0.291  0.566   0.428   0.696
+2022-11-13 18:29:35,989 - INFO - Best accuracy is: 0.69600
+2022-11-13 18:29:35,989 - INFO - Best meanIOU is: 0.42800
+2022-11-13 19:21:49,783 - INFO - ------------------------>> loss @ epoch 18: 1.179825
+2022-11-13 19:25:18,122 - INFO - Best accuracy is: 0.69600
+2022-11-13 19:25:18,122 - INFO - Best meanIOU is: 0.42800
+2022-11-13 20:18:11,908 - INFO - ------------------------>> loss @ epoch 19: 1.172801
+2022-11-13 20:21:39,732 - INFO - Best accuracy is: 0.69600
+2022-11-13 20:21:39,733 - INFO - Best meanIOU is: 0.42800
+2022-11-13 21:14:58,904 - INFO - ------------------------>> loss @ epoch 20: 1.168700
+2022-11-13 21:18:25,555 - INFO - Best accuracy is: 0.69600
+2022-11-13 21:18:25,556 - INFO - Best meanIOU is: 0.42800
+2022-11-13 22:12:02,885 - INFO - ------------------------>> loss @ epoch 21: 1.163121
+2022-11-13 22:15:23,382 - INFO - Best accuracy is: 0.69600
+2022-11-13 22:15:23,383 - INFO - Best meanIOU is: 0.42800
+2022-11-13 23:09:39,532 - INFO - ------------------------>> loss @ epoch 22: 1.157984
+2022-11-13 23:13:07,617 - INFO -          classes iou_tr acc_tr iou_val acc_val
+0         ground  0.697  0.926   0.854   0.952
+1  road_markings  0.169  0.206   0.395   0.453
+2        natural  0.374  0.647   0.501   0.734
+3       building  0.219  0.367   0.286   0.404
+4   utility_line  0.386  0.549   0.547   0.770
+5           pole  0.327  0.497   0.467   0.555
+6            car  0.225  0.346   0.388   0.591
+7          fence  0.025  0.031   0.042   0.063
+8        OA/mIoU  0.303  0.579   0.435   0.709
+2022-11-13 23:13:07,629 - INFO - Best accuracy is: 0.70900
+2022-11-13 23:13:07,629 - INFO - Best meanIOU is: 0.43500

@@ -6,7 +6,7 @@ import numpy as np
 from torch import nn
 import torch.nn.functional as F
 from typing import Callable, Optional
-from modules.trans_modules70 import fast_attn, IT_Fast_Attn, sth2, ClassicMHA
+from modules.trans_modules70 import KVQcMHA, IT_Fast_Attn, sth2, ClassicMHA
 from helper_files.gen_utils import poolNsample, indexing_neighbor, sth3
 from memcnn import InvertibleModuleWrapper  #todo: compare and correct
 from memcnn.models.additive import AdditiveCoupling
@@ -53,10 +53,10 @@ def create_fanet_module(d_in, **kwargs):  # F function concat split of input
 
     return AdditiveCouplingHalf(F=IT_Fast_Attn(dim=F_d_in, layer_num=layer_num, hidden_dim=h_dim, niter_heads=2), channel_split_pos=F_d_out)
 
-# def create_nystrom_module(d_in, **kwargs):
-#     layer_num = kwargs.get('layer_num')
-#     F_d_in = d_in // 2
-#     return AdditiveCouplingHalf(F=Transformer_Layer(dim=F_d_in, layer_num=layer_num), channel_split_pos=F_d_in)
+def create_KVQcMHA_module(d_in, **kwargs):
+    layer_num = kwargs.get('layer_num')
+    F_d_in = d_in // 2
+    return AdditiveCouplingHalf(F=KVQcMHA(dim=F_d_in, layer_num=layer_num), channel_split_pos=F_d_in)
 
 # def create_fanet_module(d_in, **kwargs):  # Double function rev. Fm, Gm
 #     """Single Head Capacity"""
@@ -103,11 +103,8 @@ class AdditiveCouplingHalf(nn.Module):
         # self.pos_ref = []
 
     def forward(self, x):
-        # pos = x[0][:, :3, :].permute(0, 2, 1)
-        # x = x[0][:, 3:, :]
         x = x.permute(0, 2, 1)
         # print('pos: {} | x: {}'.format(pos.shape, x.shape))
-        # x = channel_shuffle(x.unsqueeze(-1), groups=4).squeeze(-1)  # TODO: switch channel_shuffle on or off
         x1, x2 = x[:, :self.channel_split_pos], x[:, self.channel_split_pos:]
         x1, x2 = x1.contiguous(), x2.contiguous()
         y1 = x2  # todo: can expand to have revtorch version
@@ -134,7 +131,7 @@ class AdditiveCouplingHalf(nn.Module):
 class EncoderModule(nn.Module):
     def __init__(self, d_in: int, d_out: int, layer_num: int, depth: int=1, downsample: bool=True,
                  disable_custom_gradient: bool=False,  # todo: custom_gradient switch
-                 create_module_fn: CreateModuleFnType = create_fanet_module):  # todo: switch btwn the different 'create *** modules
+                 create_module_fn: CreateModuleFnType = create_KVQcMHA_module):  # todo: switch btwn the different 'create *** modules
         super(EncoderModule, self).__init__()
         self.downsample = downsample
         self.depth = depth
@@ -198,7 +195,7 @@ class EncoderModule(nn.Module):
 class PyramidLevel1Block(nn.Module):
     def __init__(self, d_in: int, d_out: int, layer_num: int, save_var: str,
                 disable_custom_gradient: bool=False,
-                create_module_fn: CreateModuleFnType = create_fanet_module):
+                create_module_fn: CreateModuleFnType = create_KVQcMHA_module):
         super(PyramidLevel1Block, self).__init__()
 
         self.save_var = save_var
@@ -245,7 +242,7 @@ class PyramidLevel1Block(nn.Module):
 class PyramidDecoderModule(nn.Module):
     def __init__(self, d_in: int, d_out: int, layer_num: int, upsample: bool=True, 
                 disable_custom_gradient: bool=False,
-                create_module_fn: CreateModuleFnType = create_fanet_module):
+                create_module_fn: CreateModuleFnType = create_KVQcMHA_module):
         super(PyramidDecoderModule, self).__init__()
         self.upsample = upsample
         self.block_modules = nn.ModuleList()
@@ -297,7 +294,7 @@ class PyramidDecoderModule(nn.Module):
 class DecoderModule(nn.Module):
     def __init__(self, d_in: int, d_out: int, depth: int=1, upsample: bool=True,
                  disable_custom_gradient: bool=False,  # todo: custom_gradient switch
-                 create_module_fn: CreateModuleFnType = create_fanet_module):  # todo: switch btwn the different 'create *** modules'
+                 create_module_fn: CreateModuleFnType = create_KVQcMHA_module):  # todo: switch btwn the different 'create *** modules'
         super(DecoderModule, self).__init__()
         self.depth = depth
         self.upsample = upsample
@@ -395,6 +392,7 @@ class point_embedding(nn.Module):
         
         if self.use_color:
             pnt_emb = self.mlp1(torch.cat((torch.max(concat, dim=-1)[0], pos[:, 3:, :]), dim=1).permute(0, 2, 1))  # B N C
+            # print(pnt_emb)
         else:
             pnt_emb = self.mlp1(torch.max(concat, dim=-1)[0].permute(0, 2, 1))
 
@@ -417,7 +415,7 @@ class iNet(nn.Module):
         self.fc_layer = nn.Sequential(
             nn.Conv1d(128, 128, kernel_size=1, bias=True),
             nn.BatchNorm1d(128),
-            nn.ReLU(inplace=True),
+            nn.ReLU(),
             nn.Dropout(cfg.dropout),
             nn.Conv1d(128, cfg.num_classes, kernel_size=1, bias=True),  # Config.num_classes
         )
